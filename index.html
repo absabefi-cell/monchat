@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MonChat</title>
+<meta name="theme-color" content="#0b7d5a">
+<link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<style>
+body{margin:0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:#0b7d5a;color:#fff;font:18px system-ui,sans-serif;text-align:center;padding:20px;box-sizing:border-box}
+img{width:110px;height:110px;border-radius:24px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+h1{margin:0;font-size:28px}
+button{font-size:17px;padding:10px 28px;border:0;border-radius:10px;background:#fff;color:#0b7d5a;font-weight:600}
+</style>
+</head>
+<body>
+<img src="icon.png" alt="">
+<h1>MonChat</h1>
+<div id="m">Connexion au serveur...</div>
+<button id="r" hidden>Réessayer</button>
+<script>
+const U='absabefi-cell',R='monchat';
+const m=document.getElementById('m'),r=document.getElementById('r');
+async function lien(){
+  try{const x=await fetch('https://api.github.com/repos/'+U+'/'+R+'/contents/serveur.json',{headers:{Accept:'application/vnd.github.raw+json'},cache:'no-store'});if(x.ok){const d=await x.json();if(d.url)return d.url}}catch(e){}
+  try{const x=await fetch('serveur.json?t='+Date.now(),{cache:'no-store'});if(x.ok){const d=await x.json();if(d.url)return d.url}}catch(e){}
+  return null;
+}
+async function go(){m.textContent='Connexion au serveur...';r.hidden=true;const url=await lien();if(url){location.replace(url);return}m.textContent='Serveur introuvable pour le moment. Réessaie dans quelques minutes.';r.hidden=false}
+r.onclick=go;go();
+</script>
+</body>
+</html>
